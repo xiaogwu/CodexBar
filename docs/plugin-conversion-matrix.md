@@ -17,9 +17,9 @@ script. Settings-derived origins include the private-network HTTP policy for LLM
 
 `converted` means the bundled conversion is present behind `CODEXBAR_JS_PROVIDERS=1`. `cut-over` means the script is
 authoritative on its supported engines; each row states whether a Linux native core remains. Totals count only the
-69 audit rows below, excluding the separately listed plugin-first additions. The registry now contains 108 providers:
-69 audit rows, 30 additional plugin-first rows, and 9 providers not yet classified in this matrix (CodeRabbit,
-Hugging Face, IBM Bob, Muse, Nous, Pi, Replicate, TypeSafe, and v0).
+69 audit rows below, excluding the separately listed plugin-first additions. The registry now contains 109 providers:
+69 audit rows, 30 additional plugin-first rows, and 10 providers not yet classified in this matrix (CodeRabbit,
+Hugging Face, IBM Bob, Muse, Nous, Pi, Replicate, TypeSafe, v0, and Floodgate).
 
 `needs-cookie-import` now means **additional cookie/session capability**, not absence of cookie import. The current
 broker imports declared domains, caches each domain separately (#3815), and offers policy-only
@@ -58,8 +58,8 @@ Abacus, Muse, LongCat, Replicate, and TypeSafe unchanged.
 | `needs-host-extension` | 4 |
 | **Audit total** | **69** |
 | Additional plugin-first providers | 30 |
-| Registered providers not yet classified here | 9 |
-| **Registry total** | **108** |
+| Registered providers not yet classified here | 10 |
+| **Registry total** | **109** |
 
 ## Matrix
 
