@@ -117,6 +117,7 @@ extension ProviderInstanceID {
     public static let siliconflow = UsageProvider.siliconflow.instanceID
     public static let tripo = UsageProvider.tripo.instanceID
     public static let googledeveloper = UsageProvider.googledeveloper.instanceID
+    public static let floodgate = UsageProvider.floodgate.instanceID
 }
 
 // swiftformat:enable sortDeclarations
