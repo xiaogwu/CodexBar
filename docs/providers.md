@@ -8,7 +8,7 @@ read_when:
 
 # Providers
 
-CodexBar currently registers 85 provider IDs. Some companies expose multiple surfaces, such as Codex vs OpenAI API or
+CodexBar currently registers 86 provider IDs. Some companies expose multiple surfaces, such as Codex vs OpenAI API or
 OpenCode vs OpenCode Go, because the auth source and quota shape differ.
 
 ## Fetch strategies (current)
@@ -148,6 +148,7 @@ complete when the available scan window covers fewer days.
 | Notion AI | Browser cookies → workspace resolution and the AI usage allowance API (`web`). |
 | [IBM Bob](ibm-bob.md) | API key from config/env → profile and per-team Bobcoin budget APIs (`api`). |
 | [Pi](pi.md) | Local Pi/OMP assistant transcripts → token history and API-rate cost estimates (`local`); no subscription quota. |
+| Floodgate | Corporate gateway host + OAuth client ID from config/env, plus the local `appleconnect` CLI → `/api/usage/v1/personal` spend/budget (`cli`). |
 
 ## Codex
 - App Auto: OAuth API first; falls back to CLI only when OAuth credentials are missing or auth/refresh is invalid.
@@ -689,6 +690,13 @@ JavaScriptCore is the macOS rollback engine. The committed `.js` is generated fr
 - Notion credits (Custom Agents, Workers) are a separate meter and are not read.
 - Status: `https://status.notion.so/` (link only).
 - Details: `docs/notion.md`.
+
+## Floodgate
+- Opt-in, CLI-gated corporate gateway provider (`defaultEnabled: false`, not widget-selectable). Nothing is probed or shown until an internal gateway host and OAuth client ID are configured — there is no default for either.
+- Configure the gateway host and OAuth client ID in Settings → Providers → Floodgate, or via `CODEXBAR_FLOODGATE_HOST` / `CODEXBAR_FLOODGATE_CLIENT_ID`. Both are stored in the CodexBar config file; env vars take precedence over the config values.
+- Requires the locally installed `appleconnect` CLI to mint a short-lived OIDC bearer token (`appleconnect getToken --interactivity-type=none`, never interactive, never a GUI prompt). No browser cookies and no Keychain reads are involved.
+- Reads `/api/usage/v1/personal` for spend against the account's budget, request count, and input/output token totals; the reset time comes from the gateway's own budget-period boundary.
+- The token is cached in memory and refreshed automatically before it expires; a token rejected by the gateway (HTTP 401) triggers exactly one forced refresh and retry.
 
 See also: `docs/provider.md` for architecture notes.
 

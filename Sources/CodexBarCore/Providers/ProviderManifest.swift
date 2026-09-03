@@ -90,5 +90,6 @@ public enum ProviderManifest {
         VercelProviderDescriptor.descriptor,
         LLMManProviderDescriptor.descriptor,
         XKiroProviderDescriptor.descriptor,
+        FloodgateProviderDescriptor.descriptor,
     ]
 }

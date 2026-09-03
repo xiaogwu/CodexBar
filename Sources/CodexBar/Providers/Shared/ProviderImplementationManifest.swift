@@ -90,5 +90,6 @@ enum ProviderImplementationManifest {
         VercelProviderImplementation(),
         LLMManProviderImplementation(),
         XKiroProviderImplementation(),
+        FloodgateProviderImplementation(),
     ]
 }
