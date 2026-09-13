@@ -167,6 +167,10 @@ extension UsageStore {
                     staleSnapshotUpdatedAt: nil).map { ($0, self.snapshots[provider.instanceID]?.updatedAt) }
             case .ollama:
                 return OllamaUIErrorMapper.userFacingMessage(raw).map { ($0, nil) }
+            case .floodgate:
+                return FloodgateUIErrorMapper.userFacingMessage(
+                    raw,
+                    staleSnapshotUpdatedAt: self.snapshots[provider.instanceID]?.updatedAt).map { ($0, nil) }
             default:
                 return (L(raw), nil)
             }
