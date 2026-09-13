@@ -38,8 +38,7 @@ struct FloodgateProviderImplementation: ProviderImplementation {
                 placeholder: "gateway.example.com",
                 binding: context.providerConfigBinding(.endpoint),
                 actions: [],
-                isVisible: nil,
-                onActivate: nil),
+                isVisible: nil),
             ProviderSettingsFieldDescriptor(
                 id: "floodgate-client-id",
                 title: "OAuth client ID",
@@ -48,8 +47,7 @@ struct FloodgateProviderImplementation: ProviderImplementation {
                 placeholder: "client-id",
                 binding: context.providerConfigBinding(.workspace),
                 actions: [],
-                isVisible: nil,
-                onActivate: nil),
+                isVisible: nil),
         ]
     }
 }

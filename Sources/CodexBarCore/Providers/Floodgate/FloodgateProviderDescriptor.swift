@@ -104,6 +104,13 @@ struct FloodgateFetchStrategy: ProviderFetchStrategy {
     /// D4: one forced refresh, one retry, on `.authenticationExpired`. Split out from `fetch`
     /// so tests can supply a stub token resolver and transport instead of a full
     /// `ProviderFetchContext`.
+    ///
+    /// A background tick can only clear CodexBar's own token cache, which does not help when the
+    /// machine's AppleConnect session itself has lapsed — `getToken --interactivity-type=none`
+    /// cannot re-establish one. A refresh the user actually clicked may therefore escalate to
+    /// `--interactivity-type=gui`, letting `appleconnect` sign them back in on the spot. This
+    /// mirrors `BrowserCookieAccessGate`, which gates its own prompt-capable work on the same
+    /// ambient `ProviderInteractionContext`.
     static func fetchUsage(
         baseURL: URL,
         clientID: String,
@@ -118,7 +125,8 @@ struct FloodgateFetchStrategy: ProviderFetchStrategy {
             let token = try await tokenResolver.token(
                 clientID: clientID,
                 environment: environment,
-                forceRefresh: true)
+                forceRefresh: true,
+                interactivity: ProviderInteractionContext.current == .userInitiated ? .gui : .none)
             return try await FloodgateUsageFetcher.fetchUsage(baseURL: baseURL, token: token, transport: transport)
         }
     }

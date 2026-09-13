@@ -110,6 +110,12 @@ extension UsageStore {
                 : self.shouldShowRefreshingMenuCardIndicator(for: provider),
             lastError: account?.error ?? codexProjection?.userFacingErrors.usage
                 ?? (isLive ? self.userFacingError(for: provider) : nil),
+            // Only the store's own error can be advisory; account errors and Codex projections are
+            // genuine failures, and either wins the `lastError` chain above.
+            lastErrorIsAdvisory: account?.error == nil &&
+                codexProjection?.userFacingErrors.usage == nil &&
+                isLive &&
+                self.userFacingErrorIsAdvisory(for: provider),
             limitsAvailability: self.knownLimitsAvailability(for: provider),
             usageBarsShowUsed: self.settings.usageBarsShowUsed,
             resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,

@@ -27,7 +27,18 @@ public actor FloodgateTokenResolver {
     /// token mint without shelling out to a CLI that may not be installed on the test machine.
     public typealias SubprocessRunning = @Sendable (
         _ clientID: String,
-        _ environment: [String: String]) async throws -> String
+        _ environment: [String: String],
+        _ interactivity: Interactivity) async throws -> String
+
+    /// Whether `appleconnect` may put UI on screen to re-establish a lapsed SSO session.
+    ///
+    /// Background refresh ticks must stay ``none``: an unattended tick that pops an AppleConnect
+    /// window (or a Touch ID sheet behind it) is exactly the surprise ``FloodgateURLSessionDelegate``
+    /// exists to prevent. ``gui`` is reserved for a refresh the user asked for by clicking.
+    public enum Interactivity: String, Sendable {
+        case none
+        case gui
+    }
 
     public static let shared = FloodgateTokenResolver()
     static let binaryPath = "/usr/local/bin/appleconnect"
@@ -46,7 +57,11 @@ public actor FloodgateTokenResolver {
         FileManager.default.isExecutableFile(atPath: self.binaryPath)
     }
 
-    public static func runAppleconnect(clientID: String, environment: [String: String]) async throws -> String {
+    public static func runAppleconnect(
+        clientID: String,
+        environment: [String: String],
+        interactivity: Interactivity = .none) async throws -> String
+    {
         guard self.isInstalled() else {
             throw FloodgateTokenError.appleconnectNotInstalled
         }
@@ -58,7 +73,7 @@ public actor FloodgateTokenResolver {
                 "-C", clientID,
                 "-G", "pkce",
                 "-o", "openid,dsid,accountname,profile,groups",
-                "--interactivity-type=none",
+                "--interactivity-type=\(interactivity.rawValue)",
                 "-E", "prod",
                 "-O", "json",
             ],
@@ -72,13 +87,14 @@ public actor FloodgateTokenResolver {
         clientID: String,
         environment: [String: String],
         forceRefresh: Bool = false,
+        interactivity: Interactivity = .none,
         now: Date = Date()) async throws -> String
     {
         if !forceRefresh, let cached, cached.expiry.timeIntervalSince(now) > Self.refreshMargin {
             return cached.token
         }
 
-        let stdout = try await self.runSubprocess(clientID, environment)
+        let stdout = try await self.runSubprocess(clientID, environment, interactivity)
         guard let token = Self.extractToken(from: stdout) else {
             Self.log.warning("Floodgate token extraction failed", metadata: ["label": "floodgate-appleconnect-token"])
             throw FloodgateTokenError.tokenNotFound

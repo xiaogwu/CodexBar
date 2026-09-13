@@ -31,6 +31,10 @@ final class FloodgateURLSessionDelegate: NSObject, URLSessionDelegate, @unchecke
 }
 
 public enum FloodgateUsageFetcher {
+    /// Raw message for an HTTP 401. Public so the UI error mapper can recognize it without
+    /// duplicating the literal.
+    public static let authenticationExpiredMessage = "Floodgate rejected the AppleConnect token."
+
     public static func makeSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.timeoutIntervalForRequest = 20
@@ -68,7 +72,9 @@ public enum FloodgateUsageFetcher {
         case 200..<300:
             return
         case 401:
-            throw ProviderFetchClassifiedError(kind: .authenticationExpired, message: "Floodgate token expired.")
+            throw ProviderFetchClassifiedError(
+                kind: .authenticationExpired,
+                message: self.authenticationExpiredMessage)
         case 403:
             throw ProviderFetchClassifiedError(kind: .permissionDenied, message: "Floodgate access denied.")
         case 429:
