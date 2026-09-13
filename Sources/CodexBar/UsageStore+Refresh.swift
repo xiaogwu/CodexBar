@@ -1404,6 +1404,7 @@ extension UsageStore {
                 after: error,
                 hadPriorData: hadPriorData,
                 priorSnapshot: self.snapshots[provider.instanceID]) ||
+                (hadPriorData && Self.isFloodgateRecoverableAuthFailure(provider: provider, error)) ||
                 (provider == .claude &&
                     hadPriorData &&
                     (context.claudeUsesConsumerAutoPipeline ||

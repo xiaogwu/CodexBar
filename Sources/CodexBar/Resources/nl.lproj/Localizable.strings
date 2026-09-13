@@ -1573,6 +1573,15 @@
 "claude_oauth_keychain_access_revoked" = "De toegang tot de Claude-sleutelhanger is ingetrokken door de tokenrotatie van Claude Code. Klik op Vernieuwen om opnieuw toegang te verlenen of zet de Claude-gebruiksbron op CLI/Web.";
 "claude_showing_last_known_usage" = "De laatst bekende gebruiksgegevens worden weergegeven (vastgelegd: %@).";
 "claude_limited_usage_detail" = "Beperkte gebruiksdetails";
+"floodgate_appleconnect_session_expired" = "AppleConnect-sessie verlopen. Klik op Vernieuwen om in te loggen.";
+"floodgate_showing_last_known_usage" = "De laatst bekende gebruiksgegevens worden weergegeven (vastgelegd: %@).";
+"Gateway host" = "Gatewayhost";
+"Your internal gateway host. Stored in the CodexBar config file." = "De host van je interne gateway. Opgeslagen in het configuratiebestand van CodexBar.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "OAuth-client-ID";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "De OAuth-client-ID van je interne gateway. Opgeslagen in het configuratiebestand van CodexBar.";
+"client-id" = "client-id";
+"Gateway usage" = "Gatewaygebruik";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Invoer";

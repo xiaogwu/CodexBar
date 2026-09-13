@@ -1577,6 +1577,15 @@
 "claude_oauth_keychain_access_revoked" = "دسترسی به Keychain کلود با چرخش توکن Claude Code لغو شد. برای اعطای مجدد دسترسی روی «تازه‌سازی» کلیک کنید، یا منبع استفاده Claude را به CLI/Web تغییر دهید.";
 "claude_showing_last_known_usage" = "آخرین میزان استفاده شناخته‌شده که در %@ ثبت شده نمایش داده می‌شود.";
 "claude_limited_usage_detail" = "جزئیات استفاده محدود است";
+"floodgate_appleconnect_session_expired" = "نشست AppleConnect منقضی شده است. برای ورود روی «به‌روزرسانی» کلیک کنید.";
+"floodgate_showing_last_known_usage" = "آخرین میزان استفاده شناخته‌شده که در %@ ثبت شده نمایش داده می‌شود.";
+"Gateway host" = "میزبان درگاه";
+"Your internal gateway host. Stored in the CodexBar config file." = "میزبان درگاه داخلی شما. در فایل پیکربندی CodexBar ذخیره می‌شود.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "شناسه کلاینت OAuth";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "شناسه کلاینت OAuth درگاه داخلی شما. در فایل پیکربندی CodexBar ذخیره می‌شود.";
+"client-id" = "client-id";
+"Gateway usage" = "مصرف درگاه";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "ورودی";

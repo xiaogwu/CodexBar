@@ -1574,6 +1574,15 @@
 "claude_oauth_keychain_access_revoked" = "Доступ до Keychain для Claude було відкликано через ротацію токена в Claude Code. Натисніть «Оновити», щоб повторно надати доступ, або перемкніть джерело використання Claude на CLI/Web.";
 "claude_showing_last_known_usage" = "Показано останні відомі дані про використання (отримано %@).";
 "claude_limited_usage_detail" = "Обмежена деталізація використання";
+"floodgate_appleconnect_session_expired" = "Сеанс AppleConnect завершився. Натисніть «Оновити», щоб увійти.";
+"floodgate_showing_last_known_usage" = "Показано останні відомі дані про використання (отримано %@).";
+"Gateway host" = "Хост шлюзу";
+"Your internal gateway host. Stored in the CodexBar config file." = "Хост вашого внутрішнього шлюзу. Зберігається у файлі конфігурації CodexBar.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "ID клієнта OAuth";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "ID клієнта OAuth вашого внутрішнього шлюзу. Зберігається у файлі конфігурації CodexBar.";
+"client-id" = "client-id";
+"Gateway usage" = "Використання шлюзу";
 /* Spend dashboard cost analysis */
 "90d" = "90 дн.";
 "Input" = "Вхідні";

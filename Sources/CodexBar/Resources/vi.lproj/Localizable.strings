@@ -1574,6 +1574,15 @@
 "claude_oauth_keychain_access_revoked" = "Quyền truy cập Chuỗi khóa Claude đã bị thu hồi do Claude Code xoay vòng mã thông báo. Nhấp vào Làm mới để cấp lại quyền truy cập hoặc chuyển nguồn sử dụng Claude sang CLI/Web.";
 "claude_showing_last_known_usage" = "Đang hiển thị mức sử dụng đã biết gần nhất, được ghi nhận %@.";
 "claude_limited_usage_detail" = "Thông tin sử dụng ít chi tiết";
+"floodgate_appleconnect_session_expired" = "Phiên AppleConnect đã hết hạn. Nhấp Làm mới để đăng nhập.";
+"floodgate_showing_last_known_usage" = "Đang hiển thị mức sử dụng đã biết gần nhất, được ghi nhận %@.";
+"Gateway host" = "Máy chủ cổng";
+"Your internal gateway host. Stored in the CodexBar config file." = "Máy chủ cổng nội bộ của bạn. Được lưu trong tệp cấu hình CodexBar.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "ID ứng dụng khách OAuth";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "ID ứng dụng khách OAuth của cổng nội bộ của bạn. Được lưu trong tệp cấu hình CodexBar.";
+"client-id" = "client-id";
+"Gateway usage" = "Mức sử dụng cổng";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Đầu vào";

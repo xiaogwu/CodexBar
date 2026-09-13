@@ -1575,6 +1575,15 @@
 "claude_oauth_keychain_access_revoked" = "Claude Anahtar Zinciri erişimi, Claude Code'un token yenilemesi nedeniyle iptal edildi. Erişimi yeniden vermek için Yenile'ye tıklayın veya Claude kullanım kaynağını CLI/Web olarak değiştirin.";
 "claude_showing_last_known_usage" = "Bilinen son kullanım gösteriliyor (yakalanma zamanı: %@).";
 "claude_limited_usage_detail" = "Kullanım ayrıntıları sınırlı";
+"floodgate_appleconnect_session_expired" = "AppleConnect oturumu sona erdi. Oturum açmak için Yenile'ye tıklayın.";
+"floodgate_showing_last_known_usage" = "Bilinen son kullanım gösteriliyor (yakalanma zamanı: %@).";
+"Gateway host" = "Ağ geçidi ana bilgisayarı";
+"Your internal gateway host. Stored in the CodexBar config file." = "Dahili ağ geçidinizin ana bilgisayarı. CodexBar yapılandırma dosyasında saklanır.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "OAuth istemci kimliği";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "Dahili ağ geçidinizin OAuth istemci kimliği. CodexBar yapılandırma dosyasında saklanır.";
+"client-id" = "client-id";
+"Gateway usage" = "Ağ geçidi kullanımı";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Girdi";

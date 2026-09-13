@@ -141,6 +141,12 @@ extension UsageStore {
             isRefreshing: isSettings ? self.refreshingProviders.contains(provider.instanceID)
                 : self.shouldShowRefreshingMenuCardIndicator(for: provider),
             lastError: lastError,
+            // Only the store's own error can be advisory; account errors and Codex projections are
+            // genuine failures, and either wins the `lastError` chain above.
+            lastErrorIsAdvisory: account?.error == nil &&
+                codexProjection?.userFacingErrors.usage == nil &&
+                isLive &&
+                self.userFacingErrorIsAdvisory(for: provider),
             limitsAvailability: isSettings && !isLive ? nil : self.knownLimitsAvailability(for: provider),
             usageBarsShowUsed: self.settings.usageBarsShowUsed,
             resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,

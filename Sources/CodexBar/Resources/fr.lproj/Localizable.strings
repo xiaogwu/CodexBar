@@ -1573,6 +1573,15 @@
 "claude_oauth_keychain_access_revoked" = "L’accès au trousseau Claude a été révoqué par la rotation du jeton de Claude Code. Cliquez sur Actualiser pour accorder à nouveau l’accès, ou définissez la source d’utilisation de Claude sur CLI/Web.";
 "claude_showing_last_known_usage" = "Affichage de la dernière utilisation connue, capturée %@.";
 "claude_limited_usage_detail" = "Détails d’utilisation limités";
+"floodgate_appleconnect_session_expired" = "Session AppleConnect expirée. Cliquez sur Actualiser pour vous connecter.";
+"floodgate_showing_last_known_usage" = "Affichage de la dernière utilisation connue, capturée %@.";
+"Gateway host" = "Hôte de la passerelle";
+"Your internal gateway host. Stored in the CodexBar config file." = "L'hôte de votre passerelle interne. Enregistré dans le fichier de configuration de CodexBar.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "ID client OAuth";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "L'ID client OAuth de votre passerelle interne. Enregistré dans le fichier de configuration de CodexBar.";
+"client-id" = "client-id";
+"Gateway usage" = "Utilisation de la passerelle";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Entrée";

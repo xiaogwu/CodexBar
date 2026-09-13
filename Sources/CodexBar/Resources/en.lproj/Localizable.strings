@@ -10,6 +10,15 @@
 "claude_oauth_keychain_access_revoked" = "Claude Keychain access was revoked by Claude Code's token rotation. Click Refresh to re-grant access, or switch Claude Usage source to CLI/Web.";
 "claude_showing_last_known_usage" = "Showing last-known usage captured %@.";
 "claude_limited_usage_detail" = "Limited usage detail";
+"floodgate_appleconnect_session_expired" = "AppleConnect session expired. Click Refresh to sign in.";
+"floodgate_showing_last_known_usage" = "Showing last-known usage captured %@.";
+"Gateway host" = "Gateway host";
+"Your internal gateway host. Stored in the CodexBar config file." = "Your internal gateway host. Stored in the CodexBar config file.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "OAuth client ID";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "Your internal gateway's OAuth client ID. Stored in the CodexBar config file.";
+"client-id" = "client-id";
+"Gateway usage" = "Gateway usage";
 
 " providers" = " providers";
 "(System)" = "(System)";

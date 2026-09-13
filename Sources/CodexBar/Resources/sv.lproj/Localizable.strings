@@ -1572,6 +1572,15 @@
 "claude_oauth_keychain_access_revoked" = "Åtkomsten till Claudes nyckelring återkallades när Claude Code roterade token. Klicka på Uppdatera för att ge åtkomst igen, eller byt Claudes användningskälla till CLI/Web.";
 "claude_showing_last_known_usage" = "Visar senast kända användning, registrerad %@.";
 "claude_limited_usage_detail" = "Begränsade användningsdetaljer";
+"floodgate_appleconnect_session_expired" = "AppleConnect-sessionen har upphört. Klicka på Uppdatera för att logga in.";
+"floodgate_showing_last_known_usage" = "Visar senast kända användning, registrerad %@.";
+"Gateway host" = "Gateway-värd";
+"Your internal gateway host. Stored in the CodexBar config file." = "Värden för din interna gateway. Sparas i CodexBars konfigurationsfil.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "OAuth-klient-ID";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "OAuth-klient-ID för din interna gateway. Sparas i CodexBars konfigurationsfil.";
+"client-id" = "client-id";
+"Gateway usage" = "Gateway-användning";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Indata";
