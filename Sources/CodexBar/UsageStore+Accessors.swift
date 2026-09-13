@@ -159,6 +159,10 @@ extension UsageStore {
                     staleSnapshotUpdatedAt: self.snapshots[provider.instanceID]?.updatedAt)
             case .ollama:
                 return OllamaUIErrorMapper.userFacingMessage(raw)
+            case .floodgate:
+                return FloodgateUIErrorMapper.userFacingMessage(
+                    raw,
+                    staleSnapshotUpdatedAt: self.snapshots[provider.instanceID]?.updatedAt)
             default:
                 return raw
             }

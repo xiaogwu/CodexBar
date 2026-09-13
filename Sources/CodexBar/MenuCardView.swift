@@ -895,11 +895,14 @@ extension UsageMenuCardView.Model {
             error: input.tokenError,
             preferredCurrencyCode: input.preferredCurrencyCode,
             calendar: input.costUsageBucketCalendar)
+        let lastError = SubtitleError(
+            message: Self.lastError(input: input),
+            isAdvisory: input.lastErrorIsAdvisory)
         let subtitle = input.subtitleOverride.map { (text: $0, style: SubtitleStyle.info) }
             ?? Self.subtitle(
                 snapshot: input.snapshot,
                 isRefreshing: input.isRefreshing,
-                lastError: Self.lastError(input: input),
+                lastError: lastError,
                 hasLastKnownUsage: input.lastKnownUsageCapturedAt != nil,
                 now: input.now)
         let redacted = Self.redactedText(input: input, subtitle: subtitle)
@@ -1072,33 +1075,6 @@ extension UsageMenuCardView.Model {
     private static func isKiloActivitySegment(_ text: String) -> Bool {
         let normalized = text.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return normalized.hasPrefix("auto top-up:")
-    }
-
-    private static func subtitle(
-        snapshot: UsageSnapshot?,
-        isRefreshing: Bool,
-        lastError: String?,
-        hasLastKnownUsage: Bool,
-        now: Date) -> (text: String, style: SubtitleStyle)
-    {
-        if let lastError, !lastError.isEmpty {
-            let message = lastError.trimmingCharacters(in: .whitespacesAndNewlines)
-            return (message, .error)
-        }
-
-        if isRefreshing {
-            return ("\(L("Refreshing"))…", .loading)
-        }
-
-        if hasLastKnownUsage {
-            return ("", .info)
-        }
-
-        if let updated = snapshot?.updatedAt {
-            return (UsageFormatter.updatedString(from: updated, now: now), .info)
-        }
-
-        return (L("Not fetched yet"), .info)
     }
 
     private struct RedactedText {

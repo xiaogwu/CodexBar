@@ -1538,6 +1538,8 @@
 "claude_oauth_keychain_access_revoked" = "تم إلغاء وصول CodexBar إلى سلسلة مفاتيح Claude بسبب تدوير الرمز المميز في Claude Code. انقر على «تحديث» لمنح الوصول مجددًا، أو بدّل مصدر استخدام Claude إلى CLI/Web.";
 "claude_showing_last_known_usage" = "يتم عرض آخر بيانات استخدام معروفة، تم التقاطها %@.";
 "claude_limited_usage_detail" = "تفاصيل الاستخدام محدودة";
+"floodgate_appleconnect_session_expired" = "انتهت صلاحية جلسة AppleConnect. انقر على تحديث لتسجيل الدخول.";
+"floodgate_showing_last_known_usage" = "يتم عرض آخر بيانات استخدام معروفة، تم التقاطها %@.";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Input";

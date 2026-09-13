@@ -9,6 +9,8 @@
 "claude_oauth_keychain_access_revoked" = "Claude Keychain access was revoked by Claude Code's token rotation. Click Refresh to re-grant access, or switch Claude Usage source to CLI/Web.";
 "claude_showing_last_known_usage" = "Showing last-known usage captured %@.";
 "claude_limited_usage_detail" = "Limited usage detail";
+"floodgate_appleconnect_session_expired" = "AppleConnect session expired. Click Refresh to sign in.";
+"floodgate_showing_last_known_usage" = "Showing last-known usage captured %@.";
 
 " providers" = " providers";
 "(System)" = "(System)";

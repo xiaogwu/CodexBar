@@ -84,7 +84,7 @@ struct FloodgateProviderTests {
         let payload = Self.base64URLEncode(#"{"exp":\#(futureExp)}"#)
 
         let tokenCallCount = TestCounter()
-        let resolver = FloodgateTokenResolver(runSubprocess: { _, _ in
+        let resolver = FloodgateTokenResolver(runSubprocess: { _, _, _ in
             await tokenCallCount.increment()
             let fakeJWT = await "\(header).\(payload).sig-\(tokenCallCount.value())"
             return #"{"oauth-id-token":"\#(fakeJWT)"}"#
