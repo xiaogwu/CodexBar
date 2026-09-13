@@ -1513,6 +1513,8 @@
 "claude_oauth_keychain_access_revoked" = "Доступ до В’язки ключів Claude було відкликано через ротацію токена в Claude Code. Натисніть «Оновити», щоб повторно надати доступ, або перемкніть джерело використання Claude на CLI/Web.";
 "claude_showing_last_known_usage" = "Показано останні відомі дані про використання (отримано %@).";
 "claude_limited_usage_detail" = "Обмежена деталізація використання";
+"floodgate_appleconnect_session_expired" = "Сеанс AppleConnect завершився. Натисніть «Оновити», щоб увійти.";
+"floodgate_showing_last_known_usage" = "Показано останні відомі дані про використання (отримано %@).";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Input";

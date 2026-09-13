@@ -1517,6 +1517,8 @@
 "claude_oauth_keychain_access_revoked" = "دسترسی به Keychain کلود با چرخش توکن Claude Code لغو شد. برای اعطای مجدد دسترسی روی «تازه‌سازی» کلیک کنید، یا منبع استفاده Claude را به CLI/Web تغییر دهید.";
 "claude_showing_last_known_usage" = "آخرین میزان استفاده شناخته‌شده که در %@ ثبت شده نمایش داده می‌شود.";
 "claude_limited_usage_detail" = "جزئیات استفاده محدود است";
+"floodgate_appleconnect_session_expired" = "نشست AppleConnect منقضی شده است. برای ورود روی «به‌روزرسانی» کلیک کنید.";
+"floodgate_showing_last_known_usage" = "آخرین میزان استفاده شناخته‌شده که در %@ ثبت شده نمایش داده می‌شود.";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Input";

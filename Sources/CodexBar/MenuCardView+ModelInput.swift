@@ -20,6 +20,9 @@ extension UsageMenuCardView.Model {
         let lastKnownUsageCapturedAt: Date?
         let isRefreshing: Bool
         let lastError: String?
+        /// Renders `lastError` in the ordinary secondary color instead of red, for conditions the
+        /// user resolves outside CodexBar (a lapsed AppleConnect session) rather than failures.
+        let lastErrorIsAdvisory: Bool
         let limitsAvailability: UsageLimitsAvailability?
         let usageBarsShowUsed: Bool
         let resetTimeDisplayStyle: ResetTimeDisplayStyle
@@ -69,6 +72,7 @@ extension UsageMenuCardView.Model {
             lastKnownUsageCapturedAt: Date? = nil,
             isRefreshing: Bool,
             lastError: String?,
+            lastErrorIsAdvisory: Bool = false,
             limitsAvailability: UsageLimitsAvailability? = nil,
             usageBarsShowUsed: Bool,
             resetTimeDisplayStyle: ResetTimeDisplayStyle,
@@ -115,6 +119,7 @@ extension UsageMenuCardView.Model {
             self.lastKnownUsageCapturedAt = lastKnownUsageCapturedAt
             self.isRefreshing = isRefreshing
             self.lastError = lastError
+            self.lastErrorIsAdvisory = lastErrorIsAdvisory
             self.limitsAvailability = limitsAvailability
             self.usageBarsShowUsed = usageBarsShowUsed
             self.resetTimeDisplayStyle = resetTimeDisplayStyle

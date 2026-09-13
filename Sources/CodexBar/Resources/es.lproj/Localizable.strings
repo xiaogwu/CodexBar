@@ -1512,6 +1512,8 @@
 "claude_oauth_keychain_access_revoked" = "El acceso al llavero de Claude fue revocado por la rotación del token de Claude Code. Haz clic en Actualizar para volver a conceder acceso o cambia el origen del uso de Claude a CLI/Web.";
 "claude_showing_last_known_usage" = "Mostrando el último uso conocido, capturado %@.";
 "claude_limited_usage_detail" = "Detalles de uso limitados";
+"floodgate_appleconnect_session_expired" = "La sesión de AppleConnect ha caducado. Haz clic en Actualizar para iniciar sesión.";
+"floodgate_showing_last_known_usage" = "Mostrando el último uso conocido, capturado %@.";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Input";
