@@ -1580,6 +1580,15 @@
 "claude_oauth_keychain_access_revoked" = "Kredensial OAuth Claude saat ini tidak dapat diakses oleh CodexBar. Klik Segarkan untuk mencoba mengaksesnya lagi, atau ubah sumber penggunaan Claude ke CLI/Web.";
 "claude_showing_last_known_usage" = "Menampilkan penggunaan terakhir yang diketahui, diambil %@.";
 "claude_limited_usage_detail" = "Rincian penggunaan terbatas";
+"floodgate_appleconnect_session_expired" = "Sesi AppleConnect kedaluwarsa. Klik Segarkan untuk masuk.";
+"floodgate_showing_last_known_usage" = "Menampilkan penggunaan terakhir yang diketahui, diambil %@.";
+"Gateway host" = "Host gateway";
+"Your internal gateway host. Stored in the CodexBar config file." = "Host gateway internal Anda. Disimpan di file konfigurasi CodexBar.";
+"gateway.example.com" = "gateway.example.com";
+"OAuth client ID" = "ID klien OAuth";
+"Your internal gateway's OAuth client ID. Stored in the CodexBar config file." = "ID klien OAuth gateway internal Anda. Disimpan di file konfigurasi CodexBar.";
+"client-id" = "client-id";
+"Gateway usage" = "Penggunaan gateway";
 /* Spend dashboard cost analysis */
 "90d" = "90d";
 "Input" = "Input";
