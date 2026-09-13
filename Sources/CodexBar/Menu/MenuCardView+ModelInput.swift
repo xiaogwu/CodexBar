@@ -23,6 +23,9 @@ extension UsageMenuCardView.Model {
         let lastError: String?
         let quotaRefreshFailed: Bool
         let dashboardRefreshFailed: Bool
+        /// Renders `lastError` in the ordinary secondary color instead of red, for conditions the
+        /// user resolves outside CodexBar (a lapsed AppleConnect session) rather than failures.
+        let lastErrorIsAdvisory: Bool
         let limitsAvailability: UsageLimitsAvailability?
         let usageBarsShowUsed: Bool
         let resetTimeDisplayStyle: ResetTimeDisplayStyle
@@ -76,6 +79,7 @@ extension UsageMenuCardView.Model {
             lastError: String?,
             quotaRefreshFailed: Bool = false,
             dashboardRefreshFailed: Bool = false,
+            lastErrorIsAdvisory: Bool = false,
             limitsAvailability: UsageLimitsAvailability? = nil,
             usageBarsShowUsed: Bool,
             resetTimeDisplayStyle: ResetTimeDisplayStyle,
@@ -126,6 +130,7 @@ extension UsageMenuCardView.Model {
             self.lastError = lastError
             self.quotaRefreshFailed = quotaRefreshFailed
             self.dashboardRefreshFailed = dashboardRefreshFailed
+            self.lastErrorIsAdvisory = lastErrorIsAdvisory
             self.limitsAvailability = limitsAvailability
             self.usageBarsShowUsed = usageBarsShowUsed
             self.resetTimeDisplayStyle = resetTimeDisplayStyle

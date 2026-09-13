@@ -149,6 +149,12 @@ extension UsageStore {
             quotaRefreshFailed: isLive ? self.errors[provider.instanceID] != nil
                 : (account?.quotaRefreshFailed ?? (account?.error != nil)),
             dashboardRefreshFailed: isLive && self.lastOpenAIDashboardError != nil,
+            // Only the store's own error can be advisory; account errors and Codex projections are
+            // genuine failures, and either wins the `lastError` chain above.
+            lastErrorIsAdvisory: account?.error == nil &&
+                codexProjection?.userFacingErrors.usage == nil &&
+                isLive &&
+                self.userFacingErrorIsAdvisory(for: provider),
             limitsAvailability: isSettings && !isLive ? nil : self.knownLimitsAvailability(for: provider),
             usageBarsShowUsed: self.settings.usageBarsShowUsed,
             resetTimeDisplayStyle: self.settings.resetTimeDisplayStyle,
