@@ -78,6 +78,26 @@ struct FloodgateProviderTests {
     }
 
     @Test
+    func `appleconnect selects the ID token when access and ID tokens are both present`() {
+        let header = Self.base64URLEncode(#"{"alg":"none"}"#)
+        let payload = Self.base64URLEncode(#"{"exp":4102444800}"#)
+        let idToken = "\(header).\(payload).id-signature"
+        let accessToken = "\(header).\(payload).access-signature"
+        for key in ["oauth-id-token", "id_token", "idToken"] {
+            let json = #"{"oauth-access-token":"\#(accessToken)","result":{"\#(key)":"\#(idToken)"}}"#
+            #expect(FloodgateTokenResolver.extractToken(from: json) == idToken)
+        }
+        let invalidID = #"{"oauth-access-token":"\#(accessToken)","oauth-id-token":"invalid"}"#
+        #expect(FloodgateTokenResolver.extractToken(from: invalidID) == nil)
+        let accessOnly = #"{"oauth-access-token":"\#(accessToken)"}"#
+        #expect(FloodgateTokenResolver.extractToken(from: accessOnly) == nil)
+        let ambiguous = #"{"first":"\#(accessToken)","second":"\#(idToken)"}"#
+        #expect(FloodgateTokenResolver.extractToken(from: ambiguous) == nil)
+        let legacy = #"{"result":{"token":"\#(idToken)"}}"#
+        #expect(FloodgateTokenResolver.extractToken(from: legacy) == idToken)
+    }
+
+    @Test
     func `expired token triggers one forced refresh`() async throws {
         let futureExp = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
         let header = Self.base64URLEncode(#"{"alg":"none"}"#)
