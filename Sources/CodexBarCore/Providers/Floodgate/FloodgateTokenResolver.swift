@@ -17,11 +17,9 @@ public enum FloodgateTokenError: LocalizedError, Sendable, Equatable {
 /// Mints and caches the OIDC bearer token the corporate gateway expects, by shelling out to the
 /// locally installed `appleconnect` CLI.
 ///
-/// `appleconnect getToken -O json`'s exact field name for the id_token was never confirmed (R1
-/// in the implementation plan), so ``extractToken(from:)`` is shape-agnostic: it looks for the
-/// first JWT-shaped string value at any depth in the decoded JSON, and falls back to the last
-/// whitespace-separated token when stdout is not JSON at all. Never logs the token, stdout, or
-/// stderr body — only success/failure and the subprocess label.
+/// AppleConnect returns both an OAuth access token and an OIDC ID token. The gateway requires
+/// the ID token; never select a token based on dictionary iteration order. Unknown output shapes
+/// are accepted only when they contain one unambiguous JWT. Token values are never logged.
 public actor FloodgateTokenResolver {
     /// Runs `appleconnect` and returns its raw stdout. Injectable so tests can supply a fake
     /// token mint without shelling out to a CLI that may not be installed on the test machine.
@@ -105,19 +103,18 @@ public actor FloodgateTokenResolver {
         return token
     }
 
-    /// Finds a bearer token in `appleconnect`'s output without depending on a specific JSON key
-    /// name. Decodes stdout as JSON and returns the first string value, at any depth, that looks
-    /// like a JWT (three dot-separated segments whose middle segment base64url-decodes to JSON
-    /// containing `exp`). Falls back to the last whitespace-separated token when stdout is not
-    /// JSON — the shape a known-working non-JSON `appleconnect` caller parses.
+    /// Prefers AppleConnect's named OIDC ID token, including nested JSON responses. For legacy
+    /// output shapes, accepts a single unambiguous JWT or the final token in plain-text output.
     static func extractToken(from stdout: String) -> String? {
         let trimmed = stdout.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
         if let data = trimmed.data(using: .utf8),
-           let json = try? JSONSerialization.jsonObject(with: data),
-           let token = self.firstJWT(in: json)
+           let json = try? JSONSerialization.jsonObject(with: data)
         {
+            let idTokens = self.tokenCandidates(in: json, idTokensOnly: true)
+            let candidates = Set(idTokens.isEmpty ? self.tokenCandidates(in: json) : idTokens)
+            guard candidates.count == 1, let token = candidates.first, self.isJWT(token) else { return nil }
             return token
         }
 
@@ -132,22 +129,23 @@ public actor FloodgateTokenResolver {
         return nil
     }
 
-    private static func firstJWT(in value: Any) -> String? {
+    private static func tokenCandidates(in value: Any, idTokensOnly: Bool = false) -> [String] {
         switch value {
         case let string as String:
-            return self.isJWT(string) ? string : nil
+            !idTokensOnly && self.isJWT(string) ? [string] : []
         case let array as [Any]:
-            for element in array {
-                if let found = self.firstJWT(in: element) { return found }
-            }
-            return nil
+            array.flatMap { self.tokenCandidates(in: $0, idTokensOnly: idTokensOnly) }
         case let dictionary as [String: Any]:
-            for value in dictionary.values {
-                if let found = self.firstJWT(in: value) { return found }
+            dictionary.flatMap { key, value in
+                if idTokensOnly, ["oauth-id-token", "id_token", "idToken"].contains(key) {
+                    // An explicitly malformed ID token must not fall back to an access token.
+                    return [value as? String ?? ""]
+                }
+                if ["oauth-access-token", "access_token", "accessToken"].contains(key) { return [] }
+                return self.tokenCandidates(in: value, idTokensOnly: idTokensOnly)
             }
-            return nil
         default:
-            return nil
+            []
         }
     }
 
