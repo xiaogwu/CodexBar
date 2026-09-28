@@ -621,12 +621,10 @@ enum MenuBarLayoutBalanceResolver {
                       let value = balanceDetail.split(separator: " ", maxSplits: 1).first
             else { return nil }
             return (balanceDetail.contains(" owed") ? "-" : "") + String(value)
-        case .moonshot, .poe:
-            let value = self.displayValue(
-                from: snapshot?.loginMethod(for: provider), prefix: "Balance:", removingSuffix: "")
-            return provider == .moonshot
-                ? value?.split(separator: "·", maxSplits: 1).first?.trimmingCharacters(in: .whitespacesAndNewlines)
-                : value
+        case .moonshot:
+            return self.displayValue(
+                from: snapshot?.loginMethod(for: provider), prefix: "Balance:", removingSuffix: "")?
+                .split(separator: "·", maxSplits: 1).first?.trimmingCharacters(in: .whitespacesAndNewlines)
         case .mistral:
             return self.displayValue(
                 from: snapshot?.identity?.loginMethod, prefix: "API spend:", removingSuffix: " this month")
@@ -640,7 +638,10 @@ enum MenuBarLayoutBalanceResolver {
         case .devpass:
             return snapshot?.detailRow(label: "Cycle remaining")?.value
         default:
-            return nil
+            guard ProviderDescriptorRegistry.descriptor(for: provider).presentation.planRow.stripsBalancePrefix
+            else { return nil }
+            return self.displayValue(
+                from: snapshot?.loginMethod(for: provider), prefix: "Balance:", removingSuffix: "")
         }
     }
 
@@ -655,8 +656,7 @@ enum MenuBarLayoutBalanceResolver {
         else {
             return nil
         }
-        let valueStart = rawValue.index(rawValue.startIndex, offsetBy: prefix.count)
-        var value = rawValue[valueStart...].trimmingCharacters(in: .whitespacesAndNewlines)
+        var value = rawValue.dropFirst(prefix.count).trimmingCharacters(in: .whitespacesAndNewlines)
         if !suffix.isEmpty, value.hasSuffix(suffix) {
             value = String(value.dropLast(suffix.count)).trimmingCharacters(
                 in: .whitespacesAndNewlines)

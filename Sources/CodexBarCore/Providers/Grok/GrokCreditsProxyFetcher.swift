@@ -67,7 +67,9 @@ public enum GrokCreditsProxyFetcher {
                 usedPercent: min(100, max(0, percent)),
                 resetsAt: resetsAt,
                 windowMinutes: windowMinutes,
-                subscriptionTier: subscriptionTier)
+                subscriptionTier: subscriptionTier,
+                productUsage: GrokProductUsage.composing(
+                    config.productUsage?.values ?? [], creditUsagePercent: percent))
         }
 
         if let cap = config.onDemandCap?.val,
@@ -115,6 +117,38 @@ public enum GrokCreditsProxyFetcher {
         let onDemandCap: CreditsAmount?
         let onDemandUsed: CreditsAmount?
         let subscriptionTier: String?
+        let productUsage: LossyProductUsageArray?
+    }
+
+    private struct LossyProductUsageArray: Decodable {
+        let values: [GrokProductUsage]?
+
+        init(from decoder: Decoder) {
+            self.values = (try? decoder.singleValueContainer().decode([LossyProductUsage].self))?
+                .map(\.value)
+        }
+    }
+
+    private struct LossyProductUsage: Decodable {
+        let value: GrokProductUsage
+
+        private enum CodingKeys: String, CodingKey {
+            case product
+            case usagePercent
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let product = try container.decode(String.self, forKey: .product)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let percent = try container.decode(Double.self, forKey: .usagePercent)
+            guard !product.isEmpty, percent.isFinite, percent >= 0 else {
+                throw DecodingError.dataCorrupted(.init(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Invalid product usage"))
+            }
+            self.value = GrokProductUsage(product: product, usedPercent: percent)
+        }
     }
 
     private struct CurrentPeriod: Decodable {

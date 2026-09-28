@@ -73,6 +73,7 @@ extension SettingsStore {
         _ = self.openAIWebBatterySaverEnabled
         _ = self.backgroundWorkLowPowerModePreference
         _ = self.providerStorageFootprintsEnabled
+        _ = self.stayAwakeEnabled
         _ = self.agentSessionsEnabled
         _ = self.agentSessionLabelStyle
         _ = self.agentSessionsManualHosts
@@ -97,6 +98,7 @@ extension SettingsStore {
         _ = self.augmentCookieSource
         _ = self.ampCookieSource
         _ = self.t3ChatCookieSource
+        _ = self.museCookieSource
         _ = self.zoomMateCookieSource
         _ = self.ollamaCookieSource
         _ = self.mergeIcons
@@ -123,6 +125,7 @@ extension SettingsStore {
         _ = self.augmentCookieHeader
         _ = self.ampCookieHeader
         _ = self.t3ChatCookieHeader
+        _ = self.museCookieHeader
         _ = self.zoomMateCookieHeader
         _ = self.ollamaCookieHeader
         _ = self.copilotAPIToken

@@ -18,6 +18,7 @@ public struct ClaudeUsageSnapshot: Sendable {
     public let opus: RateWindow?
     public let extraRateWindows: [NamedRateWindow]
     public let providerCost: ProviderCostSnapshot?
+    public let resetCredits: ClaudeRateLimitResetCreditsSnapshot?
     public let updatedAt: Date
     public let accountEmail: String?
     public let accountOrganization: String?
@@ -45,6 +46,7 @@ public struct ClaudeUsageSnapshot: Sendable {
         opus: RateWindow?,
         extraRateWindows: [NamedRateWindow] = [],
         providerCost: ProviderCostSnapshot? = nil,
+        resetCredits: ClaudeRateLimitResetCreditsSnapshot? = nil,
         updatedAt: Date,
         accountEmail: String?,
         accountOrganization: String?,
@@ -64,6 +66,7 @@ public struct ClaudeUsageSnapshot: Sendable {
         self.opus = opus
         self.extraRateWindows = extraRateWindows
         self.providerCost = providerCost
+        self.resetCredits = resetCredits
         self.updatedAt = updatedAt
         self.accountEmail = accountEmail
         self.accountOrganization = accountOrganization
@@ -113,7 +116,7 @@ public struct ClaudeUsageFetcher: ClaudeUsageFetching, Sendable {
     private static let cliProbeTimeout: TimeInterval = 24
     private static let cliRetryProbeTimeout: TimeInterval = 60
     private struct Configuration {
-        let environment: [String: String]
+        @ProcessEnvironment var environment: [String: String]
         let runtime: ProviderRuntime
         let dataSource: ClaudeUsageDataSource
         let oauthKeychainPromptCooldownEnabled: Bool
@@ -1287,6 +1290,7 @@ extension ClaudeUsageFetcher {
             opus: opus,
             extraRateWindows: webData.extraRateWindows,
             providerCost: webData.extraUsageCost,
+            resetCredits: webData.resetCredits,
             updatedAt: Date(),
             accountEmail: webData.accountEmail,
             accountOrganization: webData.accountOrganization,

@@ -1,10 +1,11 @@
-/** A secret header bound to one declared origin; reject with its opaque ID to advance safely. */
+/** A host-issued candidate. Request-URL cookie policies expose metadata only. */
 interface CodexBarCookieSession {
   readonly id: string;
-  readonly header: string;
+  readonly header?: string;
   readonly source: string;
   readonly origin: string;
   readonly cachedAt?: number;
+  readonly cacheKey?: string;
 }
 
 type CodexBarJSONPrimitive = boolean | number | string | null;
@@ -157,6 +158,8 @@ interface CodexBarFetchResult {
 }
 
 interface CodexBarHTTPRequestOptions {
+  /** Opaque session ID issued by browser.sessions for a request-url cookie policy. */
+  cookieSession?: string;
   headers?: Readonly<Record<string, string>>;
   /** Hard deadline from transport start, 1–90 seconds (default 15); also bounded by the overall fetch deadline. */
   timeoutSeconds?: number;
@@ -174,6 +177,7 @@ interface CodexBarHTTPError extends Error {
 }
 
 interface CodexBarHTTPResponse {
+  readonly url: string;
   /** `http-status` exposes non-2xx responses so the plugin can take over classification from the host. */
   status: number;
   headers: Readonly<Record<string, string>>;
@@ -203,15 +207,20 @@ interface CodexBarFailures {
   apiFailure(message: unknown, options?: CodexBarRetryOptions): Error;
 }
 
+type CodexBarPOSTOptions = CodexBarHTTPRequestOptions &
+  ({ body: CodexBarJSONValue; form?: never } | { form: Readonly<Record<string, string>>; body?: never });
+
 interface CodexBarPluginContext {
   readonly http: {
+    getWithOptional(
+      url: string,
+      optional: string | (CodexBarPOSTOptions & { url: string; method: "POST" }),
+      opts?: CodexBarHTTPRequestOptions & { optionalBudgetSeconds?: number },
+    ): Promise<CodexBarHTTPTextResponse & { optional: CodexBarHTTPTextResponse | null }>;
     getJSON<T = unknown>(url: string, options?: CodexBarHTTPRequestOptions): Promise<CodexBarHTTPJSONResponse<T>>;
     get(url: string, options?: CodexBarHTTPRequestOptions): Promise<CodexBarHTTPTextResponse>;
-    /** POST a JSON body and retain the response text, including non-JSON error responses. */
-    post(
-      url: string,
-      options: CodexBarHTTPRequestOptions & { body: CodexBarJSONValue },
-    ): Promise<CodexBarHTTPTextResponse>;
+    /** POST a JSON body or a host-encoded form and retain the response text. */
+    post(url: string, options: CodexBarPOSTOptions): Promise<CodexBarHTTPTextResponse>;
     postJSON<T = unknown>(
       url: string,
       options: CodexBarHTTPRequestOptions & { body: CodexBarJSONValue },
@@ -223,6 +232,7 @@ interface CodexBarPluginContext {
   };
   readonly browser: {
     availability(domain: string): "available" | "off" | "manual";
+    acceptCookie(domain: string, session: CodexBarCookieSession): void;
     rejectCookie(domain: string, session?: CodexBarCookieSession): void;
     sessions(domain: string, options?: { cachedOnly?: boolean }): AsyncIterable<CodexBarCookieSession>;
     cookieHeader(domain: string): Promise<string>;
@@ -237,6 +247,8 @@ interface CodexBarPluginContext {
     unixSeconds(value: number): Date;
     unixMillis(value: number): Date;
     nextDailyReset(timeZone: string, hour: number): Date;
+    /** Gregorian calendar arithmetic with Foundation end-of-month clamping, in the given IANA zone. */
+    addMonths(date: Date, months: number, timeZone: string): Date;
   };
   readonly format: {
     /** Native en_US currency formatting, including decimal half-even rounding and signed zero. */
@@ -253,6 +265,11 @@ interface CodexBarPluginContext {
     get<T = unknown>(key: string): T | undefined;
     set(key: string, value: unknown, ttlSeconds: number): void;
   };
+  readonly storage: {
+    get(key: string): string | null;
+    set(key: string, value: string): void;
+    remove(key: string): void;
+  };
   readonly jwt: {
     decode<T = unknown>(token: string): T;
   };
@@ -266,14 +283,25 @@ interface CodexBarProviderDefinition {
   id: string;
   name: string;
   icon?: { monogram?: string; tint?: string };
-  /** Shows this plugin as its own provider-switcher tab. */
+  /** Defaults to true: a switcher tab when Merge Icons is on. False keeps an appended card. */
   topLevel?: boolean;
   endpoints: CodexBarEndpoint[];
   auth?: CodexBarAuth;
   settings: CodexBarSetting[];
-  /** Grants declared browser-cookie access or lets the plugin observe and classify non-2xx HTTP responses. */
-  capabilities?: Array<"browser-cookies" | "http-status">;
+  /** Grants declared cookie access, HTTP status handling, or bounded non-secret persistent state. */
+  capabilities?: Array<"browser-cookies" | "http-status" | "persistent-storage">;
   cookieDomains?: string[];
+  snapshotPolicy?: { percent: "clamp" | "preserve-overage" };
+  /** Bundled-only, host-owned per-profile cookie selection without persistent session caching. */
+  cookiePolicy?: {
+    selection: "request-url" | "ranked-source-domains";
+    cache: "nonpersistent" | "validated-single-entry";
+    sourceDomains?: string[];
+    requiredCookies?: string[];
+    missingCookies?: "reject" | "omit";
+    imports?: "app-interactive" | "access-gated";
+    sessionFile?: { tokenField: string; cookieName: string };
+  };
   fetchUsage(
     ctx: CodexBarPluginContext,
   ): CodexBarUsageSnapshot | CodexBarFetchResult | Promise<CodexBarUsageSnapshot | CodexBarFetchResult>;
