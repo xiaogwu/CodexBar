@@ -229,20 +229,13 @@ public enum AntigravityProviderDescriptor {
         case .oauth:
             return [oauth]
         case .auto:
-            // The long-lived app refreshes providers unattended. Do not launch `agy` from Auto there:
-            // an expired CLI session can open an interactive Google OAuth page on every refresh.
-            // Explicit CLI mode remains available in Settings, and one-shot CLI commands retain Auto's
-            // CLI fallback because they were initiated interactively.
-            let localStrategies: [any ProviderFetchStrategy] = context.runtime == .app
-                ? [app, ide]
-                : [app, cli, ide]
             if context.selectedTokenAccountID != nil ||
                 context.env[AntigravityOAuthCredentialsStore.environmentCredentialsKey] != nil ||
                 self.hasSharedOAuthCredentials(context: context)
             {
-                return localStrategies + [oauth, offline]
+                return [app, cli, ide, oauth, offline]
             }
-            return localStrategies + [offline]
+            return [app, cli, ide, offline]
         case .web, .api:
             return []
         }

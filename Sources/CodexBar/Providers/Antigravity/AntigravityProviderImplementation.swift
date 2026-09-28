@@ -58,8 +58,8 @@ struct AntigravityProviderImplementation: ProviderImplementation {
             ProviderSettingsPickerDescriptor(
                 id: "antigravity-usage-source",
                 title: "Usage source",
-                subtitle: "Auto uses a running Antigravity app or IDE, saved Google OAuth, or offline data without " +
-                    "launching agy in the background. Choose Local API / agy CLI to opt in to agy's signed-in account.",
+                subtitle: "Auto skips agy reports without account identity for selected or injected Google accounts. " +
+                    "Try Local API / agy CLI to use the local app or agy's signed-in account, which may differ.",
                 binding: context.rawValueBinding(\.antigravityUsageDataSource, fallback: .auto),
                 options: AntigravityUsageDataSource.allCases.map {
                     ProviderSettingsPickerOption(id: $0.rawValue, title: $0.displayName)
