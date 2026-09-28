@@ -129,26 +129,27 @@ struct AntigravityCLIHTTPSFetchStrategyTests {
     }
 
     @Test
-    func `strategy pipeline includes cli HTTPS fallback in cli and auto modes`() async {
+    func `strategy pipeline keeps cli fallback explicit in the app`() async {
         let descriptor = ProviderDescriptorRegistry.descriptor(for: .antigravity)
+        let localWithCLI = [
+            "antigravity.app-local", "antigravity.cli-https", "antigravity.ide-local", "antigravity.offline",
+        ]
 
         let cliStrategies = await descriptor.fetchPlan.pipeline.resolveStrategies(
             self.makeFetchContext(sourceMode: .cli))
-        #expect(cliStrategies.map(\.id) == [
-            "antigravity.app-local",
-            "antigravity.cli-https",
-            "antigravity.ide-local",
-            "antigravity.offline",
-        ])
+        #expect(cliStrategies.map(\.id) == localWithCLI)
 
         let autoStrategies = await descriptor.fetchPlan.pipeline.resolveStrategies(
             self.makeFetchContext(sourceMode: .auto))
         #expect(autoStrategies.map(\.id) == [
             "antigravity.app-local",
-            "antigravity.cli-https",
             "antigravity.ide-local",
             "antigravity.offline",
         ])
+
+        let interactiveAutoStrategies = await descriptor.fetchPlan.pipeline.resolveStrategies(
+            self.makeFetchContext(runtime: .cli, sourceMode: .auto))
+        #expect(interactiveAutoStrategies.map(\.id) == localWithCLI)
     }
 
     @Test
@@ -165,7 +166,6 @@ struct AntigravityCLIHTTPSFetchStrategyTests {
 
         #expect(autoStrategies.map(\.id) == [
             "antigravity.app-local",
-            "antigravity.cli-https",
             "antigravity.ide-local",
             "antigravity.oauth",
             "antigravity.offline",
@@ -190,7 +190,6 @@ struct AntigravityCLIHTTPSFetchStrategyTests {
 
         #expect(autoStrategies.map(\.id) == [
             "antigravity.app-local",
-            "antigravity.cli-https",
             "antigravity.ide-local",
             "antigravity.oauth",
             "antigravity.offline",
@@ -217,7 +216,6 @@ struct AntigravityCLIHTTPSFetchStrategyTests {
 
         #expect(autoStrategies.map(\.id) == [
             "antigravity.app-local",
-            "antigravity.cli-https",
             "antigravity.ide-local",
             "antigravity.oauth",
             "antigravity.offline",
