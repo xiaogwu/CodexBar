@@ -230,7 +230,7 @@ public final class ProviderPluginRuntime: @unchecked Sendable {
         contextOptions.cookieSessionInvalidator = cookieSessionInvalidator
         contextOptions.cookieSessionValidator = cookieSessionValidator
         if self.manifest.usesCookieJar {
-            let jar = ProviderPluginCookieJar()
+            let jar = ProviderPluginCookieJar(headerEcho: self.manifest.cookiePolicy?.headerEcho)
             let resolver = contextOptions.cookieSessionResolver
             contextOptions.cookieJar = jar
             contextOptions.cookieSessionResolver = { domain, cachedOnly in

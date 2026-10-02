@@ -106,6 +106,8 @@ public enum UsageProvider: String, CaseIterable, Sendable, Codable {
     case vercel
     case llmman
     case xkiro
+    case museai
+    case lithosai
     case floodgate
 }
 

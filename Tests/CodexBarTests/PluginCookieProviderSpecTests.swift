@@ -6,7 +6,7 @@ import Testing
 @MainActor
 struct PluginCookieProviderSpecTests {
     private static let providers: [UsageProvider] = [
-        .helmcode, .hyper, .manus, .perplexity, .qoder, .raycast, .sakana, .t3chat,
+        .helmcode, .hyper, .manus, .perplexity, .qoder, .raycast, .sakana, .t3chat, .lithosai,
     ]
 
     @Test

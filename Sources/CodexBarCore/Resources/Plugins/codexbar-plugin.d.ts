@@ -301,6 +301,8 @@ interface CodexBarProviderDefinition {
     missingCookies?: "reject" | "omit";
     imports?: "app-interactive" | "access-gated";
     sessionFile?: { tokenField: string; cookieName: string };
+    /** Host-only echo of a required cookie into a custom X- header on one declared HTTPS origin. */
+    headerEcho?: { origin: string; cookie: string; header: string };
   };
   fetchUsage(
     ctx: CodexBarPluginContext,

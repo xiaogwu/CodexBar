@@ -43,7 +43,7 @@ Browser discovery policy belongs to the provider. Use `ChromiumLocalStorageDisco
 catalog-derived Chromium storage discovery; the shared traversal handles localStorage, sessionStorage, and
 origin-filtered IndexedDB. For intentionally Chrome-only cookie imports, use
 `BrowserCookieImportSupport.chromeOnly(reason:)` with the provider's reason for avoiding unrelated browser prompts.
-Copilot budgets, Grok, Helmcode, Notion, Qoder, Replicate, TypeSafe, Venice, and ZoomMate retain this restricted
+Copilot budgets, Grok, Helmcode, Muse (muse.ai), Notion, Qoder, Replicate, TypeSafe, Venice, and ZoomMate retain this restricted
 default. A shared catalog is not permission to widen a provider's documented browser or credential scope.
 
 Provider behavior is descriptor-driven. Two flat first-party manifests form the closed bootstrap boundary:
@@ -93,7 +93,7 @@ lexical policy scan with a SwiftSyntax-based implementation that can model expre
 Introduce a single descriptor per provider:
 - `id` (stable `UsageProvider`)
 - display/labels/URLs (menu title, dashboard URL, status URL)
-- UI branding (icon name, primary color, 2–3-color confetti palette)
+- UI branding (icon name, primary color, 2–3-color confetti palette); see the [palette audit](provider-palette.md) for sourced accents and contrast decisions.
 - capabilities (supportsCredits, supportsTokenCost, supportsStatusPolling, supportsLogin)
 - fetch plan (allowed `--source` modes + ordered strategy pipeline)
 - CLI metadata (cliName, aliases, version provider)

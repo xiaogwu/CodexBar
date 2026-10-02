@@ -1,5 +1,89 @@
 # Changelog
 
+## 0.71.0 — 2026-10-02
+
+### Highlights
+
+- Two new providers: Muse (muse.ai) and LithosAI read your own subscription usage and balance with your browser session, bringing CodexBar to 89 providers (#4042, #4196). Thanks @lg, @mvicari, @RowboTony, and @apoorvdarshan!
+- Safer by default: CodexBar never runs binaries from the current directory or relative PATH entries, and Codex discovery refuses unsafe Node environments and PATH entries before launching anything (#4136, #4143). Thanks @maugt and @Yuxin-Qiao!
+- Much lighter cost tracking: a long series of CPU and allocation cuts for Claude, Vertex, Codex, and local agent logs, plus cached Gatekeeper verdicts for unchanged CLIs. Thanks @dustball!
+- Antigravity for every account: saved Google accounts each get their own quota through private, temporary sessions, OAuth quota requests identify as the Antigravity Hub client, and token totals are mapped correctly (#4103, #4102, #4124, #4133). Thanks @Sogl, @oldcai, and @urda!
+- Steadier sync and agent awareness: iCloud Sync recovers after a Mac is removed and applies results atomically, Agent-aware Adaptive notices Codex activity from rollout freshness, and agent sessions survive in-place CLI updates (#4144, #4161, #4119, #4120). Thanks @hhh2210 and @slavakurilyak!
+- Opt-in reset notifications tell you when a session or weekly window resets, per provider and account (#4138). Thanks @zleo-ai!
+
+### Security
+
+- Resolve bundled helpers and plugin resources from the running executable, and ignore working-directory-dependent CLI search paths (#4136). Thanks @maugt!
+
+### Added
+
+- Muse (muse.ai): track Free, Power, and Maximum weekly usage, tokens left, top-ups, resets, and renewal with Chrome or manual cookies, separately from Muse Code (#3797, #4042). Thanks @lg, @mvicari, and @RowboTony!
+- LithosAI: show console prepaid balance and optional daily/monthly spend using Chrome or manual session cookies, with host-owned same-origin CSRF handling (#3868, #4196). Thanks @apoorvdarshan!
+- Antigravity: fetch quotas for saved Google accounts through private, temporary `agy` sessions, verify each account's identity, and retain refreshed credentials without changing the ambient CLI login (#4103). Thanks @Sogl!
+- Notifications: opt-in reset alerts name the provider and session or weekly window, keep restored notices on the correct account, respect Hide personal info, and remember announced reset boundaries across refreshes and restarts (#4138). Thanks @zleo-ai!
+
+### Changed
+
+- Agent-aware Adaptive: use recent Codex rollout modification times to keep refreshes at five minutes even without a recognized live process, preserving consent and scan limits without reading rollout contents for activity (#4119, #4118). Thanks @hhh2210!
+- Antigravity: restore OAuth quota requests for saved Google accounts with the shared Hub client identity (#4102). Thanks @oldcai!
+- Docs: link the community codexbar-kde Plasma widget for Linux usage meters and agent-session views (#4117). Thanks @materemias!
+- Costs: Claude and Vertex history does far less CPU work: unchanged history is not re-saved or re-priced, reports are not rebuilt when model pricing is unchanged, older transcripts and Claude/Vertex separation are scanned cheaply, and pricing refreshes keep historical fallback rates.
+- Codex: cost scans reuse listing metadata, cache decoders, thread database discovery, and day keys, conversation titles load cheaply for large histories, and cached logs reconcile without extra filesystem probes.
+- Less background work elsewhere: identifying local agent processes, importing browser sessions for Devin, MiniMax, and Windsurf, and Keychain preflight all use less CPU.
+- Codex: reduce repeated Gatekeeper CPU use for unchanged standalone hardened-runtime CLIs on fully enforcing hosts, checking every architecture’s complete signature before reusing a verdict (#4078, #4080). Thanks @dustball!
+
+### Fixed
+
+- Codex: discover the current ChatGPT bundled CLI launcher and skip npm launchers with missing native payloads or unsafe Node discovery environments so managed login can use a working fallback (#4143). Thanks @Yuxin-Qiao!
+- iCloud Sync: prevent cancelled or superseded sync applies and removed-record recovery from overwriting provider settings, preferences, fleet records, or newer sync metadata (#4161).
+- Claude: retain an established CLI source after transient timeouts and loading stalls so Auto refreshes can retry without an unrelated missing-OAuth-credentials warning (#4129).
+- Claude: exclude usage-insights tool names and percentages from quota and account parsing (#4083).
+- Claude: keep configured MCP servers out of the direct `/usage` fallback (#4112). Thanks @sudoHG!
+- Menu bar: show the remaining quota when only the third usage window is available, including Gemini Flash Lite-only accounts, through the shared metric fallback (#4128). Thanks @devYRPauli!
+- Codex: finish cost scans with missing-parent forks while retaining their unmetered usage and restoring reporting for unaffected dates (#4140).
+- Cursor: keep Linux serve refreshes authenticated when earlier HTTP responses leave stale cookies in the process session (#4137).
+- Menu bar: apply explicit provider reordering to separate icons, including changes made in merged mode, while retaining stable identities and saved menu bar slots (#4125).
+- Pi: include Amazon Bedrock history with regional catalog prices, price one-hour cache writes correctly, and refresh older cached estimates (#4121).
+- iCloud Sync: recover a live Mac's saves after its records are removed from another Mac, without resetting shared sync state (#4144).
+- iCloud Sync: register for silent change notifications when the signed build supports push; release provisioning must enable that capability for automatic delivery (#4132).
+- Claude: answer current and legacy CLI trust dialogs only in the isolated probe directory, reject redirected paths, and wait for real quota values when usage insights are visible (#4115, #4083). Thanks @sudoHG!
+- Agent Sessions: keep sessions that are still running after an in-place CLI update deleted their binary, such as Claude Code sessions started before an auto-update, instead of dropping them from the menu and `codexbar sessions` (#4120). Thanks @slavakurilyak!
+- OpenCode: restore migrated Console workspace quota and prepaid balance, preserve legacy sessions, and label 30-day spend without inventing a monthly spending limit (#4131, #4139). Thanks @luochen211!
+- Claude: treat unmeasured session placeholders as unavailable while retaining real weekly quotas in menus and the CLI (#4107). Thanks @emanuelst!
+- Claude: show the claude-swap executable field and its help beneath the enabled account toggle (#4122). Thanks @laitifranz!
+- Claude: use a known model-scoped weekly quota for automatic and combined menu bar percentages when the regular quota windows are absent (#4126).
+- Antigravity: exclude model IDs from local token totals, correct visible and reasoning output counts, and estimate safety-routed Gemini Flash usage (#4124). Thanks @urda!
+- Antigravity: apply schema text limits per database so normal histories do not become partial after a few hundred sessions, and retain valid rows around oversized schemas (#4133). Thanks @urda!
+
+## 0.70.0 — 2026-09-29
+
+### Highlights
+
+- Quota burndown: Plan Usage now shows the recorded remaining-quota burndown for Codex and Claude next to utilization history, with capture age and calendar endpoints (#4085). Thanks @callmejustdodo!
+- Refreshed provider colors: 16 accents now match official brand sources, while colors that would hurt menu bar or widget readability keep their current values (#4075). Thanks @elijahfriedman!
+- More accurate costs: Mistral usage is priced by event type, API zone, and service tier, Antigravity and Codex model aliases and published Cyber rates are priced, and Mistral's Monthly Plan can drive the menu bar metric (#4076, #4094, #4072). Thanks @T0mSIlver and @urda!
+- Hardened diagnostics: every stored process environment is redacted from debug and test output, with a repository guard against regressions (#4106).
+
+### Security
+
+- Redact every remaining stored process environment in the app, CLI, provider contexts, and session scanners, and guard against new unredacted environment properties with a repository check (#4106).
+
+### Added
+
+- Plan Usage: show recorded remaining-quota burndown for Codex and Claude alongside utilization history, with capture age and calendar endpoints (#4085). Thanks @callmejustdodo!
+
+### Changed
+
+- Provider colors: refresh 16 verified brand accents while preserving readable menu colors and existing widget palettes; synchronize website and social preview colors (#4075). Thanks @elijahfriedman!
+
+### Fixed
+
+- Settings: keep the Usage & Spend title and Refresh button readable by giving the time-range picker its own row (#4064). Thanks @elijahfriedman!
+- Costs: price documented Antigravity and Codex model aliases, add published Cyber fallback rates, and preserve Sol estimates across the August 21 price change (#4094). Thanks @urda!
+- Mistral: offer Monthly Plan in the provider's Menu bar metric picker, so the menu bar and widgets can show the Vibe allowance without a `defaults write` (#4072). Thanks @T0mSIlver!
+- Mistral: price billing usage by event type, API zone, and service tier, so a per-second audio or priority price no longer inflates API spend and 30-day token cost (#4076). Thanks @T0mSIlver!
+- CLI: keep probe timeout and cancellation cleanup responsive on busy hosts with large process tables (#4108).
+
 ## 0.69.0 — 2026-09-28
 
 ### Highlights

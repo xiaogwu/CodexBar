@@ -31,6 +31,7 @@ check_codex_parser_hash() {
 
 check_provider_manifests() {
   "${ROOT_DIR}/Scripts/regenerate-provider-manifests.sh" --check
+  node "${ROOT_DIR}/Scripts/regenerate-provider-docs.mjs" --check
 }
 
 check_plugin_javascript() {
