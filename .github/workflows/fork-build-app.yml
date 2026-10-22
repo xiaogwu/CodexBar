@@ -1,0 +1,53 @@
+name: Build App
+
+# Fork-only: packages CodexBar.app from the integration branch (upstream plus the
+# Floodgate patch set) and uploads it as an ad-hoc signed artifact.
+on:
+  push:
+    branches: [integration]
+  workflow_dispatch:
+
+concurrency:
+  group: build-app-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  package-app:
+    # Same image as upstream's swift-test-macos job; CodexBar builds with Xcode 27 only.
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Select Xcode 27
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_27.0.app/Contents/Developer" >> "$GITHUB_ENV"
+          [[ "$(/usr/bin/xcodebuild -version)" == Xcode\ 27* ]]
+          /usr/bin/xcodebuild -version
+
+      - name: Package CodexBar.app
+        env:
+          CODEXBAR_SIGNING: adhoc
+        run: ./Scripts/package_app.sh release
+
+      - name: Verify Floodgate shipped
+        run: |
+          set -euo pipefail
+          hits=$(strings CodexBar.app/Contents/MacOS/CodexBar | grep -ci floodgate || true)
+          echo "Floodgate binary hits: ${hits}"
+          [[ "${hits}" -gt 0 ]]
+
+      - name: Zip app bundle
+        run: ditto -c -k --keepParent CodexBar.app "CodexBar-${GITHUB_SHA::9}.zip"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.1
+        with:
+          name: CodexBar-${{ github.sha }}
+          path: CodexBar-*.zip
+          retention-days: 14
+          if-no-files-found: error
