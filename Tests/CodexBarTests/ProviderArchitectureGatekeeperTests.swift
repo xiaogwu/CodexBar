@@ -157,8 +157,8 @@ struct ProviderArchitectureGatekeeperTests {
         }
 
         // Trae CN extends the merged palette without changing existing provider colors.
-        #expect(widgetFingerprint == 13_788_777_299_776_159_303)
-        #expect(burnDownFingerprint == 4_371_421_081_959_693_460)
+        #expect(widgetFingerprint == 5_529_242_153_805_615_014)
+        #expect(burnDownFingerprint == 1_389_849_171_859_792_619)
     }
 
     @Test
@@ -2624,9 +2624,9 @@ struct ProviderArchitectureGatekeeperTests {
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore+Accessors.swift",
             anchor: "case .codex:",
-            expectedProviderIDs: ["claude", "codex", "ollama"],
-            expectedReferenceCount: 3,
-            expectedReferenceFingerprint: ["codex@0", "claude@2", "ollama@6"],
+            expectedProviderIDs: ["claude", "codex", "floodgate", "ollama"],
+            expectedReferenceCount: 4,
+            expectedReferenceFingerprint: ["codex@0", "claude@2", "ollama@6", "floodgate@8"],
             reason: "This exact app-runtime bridge coordinates provider-owned state through the shared controller."),
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore+CodexCostCatchUp.swift",
@@ -2934,7 +2934,7 @@ struct ProviderArchitectureGatekeeperTests {
             anchor: "if provider == .claude,",
             expectedProviderIDs: ["claude"],
             expectedReferenceCount: 5,
-            expectedReferenceFingerprint: ["claude@0", "claude@11", "claude@19", "claude@28", "claude@37"],
+            expectedReferenceFingerprint: ["claude@0", "claude@11", "claude@20", "claude@29", "claude@38"],
             reason: "This exact app-runtime bridge coordinates provider-owned state through the shared controller."),
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore+Refresh.swift",
