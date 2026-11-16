@@ -157,8 +157,8 @@ struct ProviderArchitectureGatekeeperTests {
         }
 
         // Tripo and Google Developer Program extend the audited palette without changing existing provider colors.
-        #expect(widgetFingerprint == 14_281_859_890_132_692_949)
-        #expect(burnDownFingerprint == 4_767_200_688_375_901_465)
+        #expect(widgetFingerprint == 2_090_534_874_936_492_896)
+        #expect(burnDownFingerprint == 7_927_257_460_199_827_300)
     }
 
     @Test
@@ -2454,9 +2454,9 @@ struct ProviderArchitectureGatekeeperTests {
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore/UsageStore+Accessors.swift",
             anchor: "case .codex:",
-            expectedProviderIDs: ["claude", "codex", "ollama"],
-            expectedReferenceCount: 3,
-            expectedReferenceFingerprint: ["codex@0", "claude@2", "ollama@6"],
+            expectedProviderIDs: ["claude", "codex", "floodgate", "ollama"],
+            expectedReferenceCount: 4,
+            expectedReferenceFingerprint: ["codex@0", "claude@2", "ollama@6", "floodgate@8"],
             reason: "This exact app-runtime bridge coordinates provider-owned state through the shared controller."),
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore/UsageStore+HighestUsage.swift",
@@ -2735,7 +2735,7 @@ struct ProviderArchitectureGatekeeperTests {
             anchor: "if provider == .claude,",
             expectedProviderIDs: ["claude"],
             expectedReferenceCount: 5,
-            expectedReferenceFingerprint: ["claude@0", "claude@11", "claude@19", "claude@28", "claude@37"],
+            expectedReferenceFingerprint: ["claude@0", "claude@11", "claude@20", "claude@29", "claude@38"],
             reason: "This exact app-runtime bridge coordinates provider-owned state through the shared controller."),
         AllowedProviderConstruct(
             path: "Sources/CodexBar/UsageStore/UsageStore+Refresh.swift",
