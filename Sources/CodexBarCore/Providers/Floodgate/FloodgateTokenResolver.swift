@@ -92,7 +92,18 @@ public actor FloodgateTokenResolver {
             return cached.token
         }
 
-        let stdout = try await self.runSubprocess(clientID, environment, interactivity)
+        let stdout: String
+        do {
+            stdout = try await self.runSubprocess(clientID, environment, interactivity)
+        } catch let SubprocessRunnerError.nonZeroExit(_, stderr) where Self.isInteractionRequired(stderr) {
+            // The machine's AppleConnect session lapsed and `--interactivity-type=none` may not
+            // re-establish it. That is the same lapsed session a gateway 401 reports, so classify
+            // it identically: the menu shows the sign-in hint, keeps the last reading, and a
+            // clicked Refresh escalates to `--interactivity-type=gui`.
+            throw ProviderFetchClassifiedError(
+                kind: .authenticationExpired,
+                message: FloodgateUsageFetcher.authenticationExpiredMessage)
+        }
         guard let token = Self.extractToken(from: stdout) else {
             Self.log.warning("Floodgate token extraction failed", metadata: ["label": "floodgate-appleconnect-token"])
             throw FloodgateTokenError.tokenNotFound
@@ -101,6 +112,14 @@ public actor FloodgateTokenResolver {
         self.cached = (token: token, expiry: expiry)
         Self.log.debug("Floodgate token refreshed", metadata: ["label": "floodgate-appleconnect-token"])
         return token
+    }
+
+    /// Matches AppleConnect's non-interactive refusal, e.g.
+    /// `{"message" : "Unable to authenticate. User's interaction is required…"}`. The apostrophe
+    /// may be typographic, so the match avoids it.
+    static func isInteractionRequired(_ stderr: String) -> Bool {
+        let lowered = stderr.lowercased()
+        return lowered.contains("unable to authenticate") || lowered.contains("interaction is required")
     }
 
     /// Prefers AppleConnect's named OIDC ID token, including nested JSON responses. For legacy

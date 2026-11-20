@@ -129,6 +129,72 @@ struct FloodgateAuthRecoveryTests {
         #expect(await recorder.requested == [.none])
     }
 
+    private static let interactionRequiredStderr = """
+    {
+      "message" : "Unable to authenticate. User\u{2019}s interaction is required to complete authentication."
+    }
+    """
+
+    /// Fails every `.none` mint the way a lapsed AppleConnect session does; `.gui` succeeds.
+    private static func lapsedSessionResolver(recorder: InteractivityRecorder) -> FloodgateTokenResolver {
+        FloodgateTokenResolver(runSubprocess: { _, _, interactivity in
+            await recorder.record(interactivity)
+            guard interactivity == .gui else {
+                throw SubprocessRunnerError.nonZeroExit(code: 255, stderr: Self.interactionRequiredStderr)
+            }
+            return #"{"oauth-id-token":"\#(Self.makeJWT(suffix: "t"))"}"#
+        })
+    }
+
+    @Test
+    func `a clicked refresh signs in through appleconnect when the session lapsed before minting`() async throws {
+        let recorder = InteractivityRecorder()
+        let resolver = Self.lapsedSessionResolver(recorder: recorder)
+        let transport = RecoverySequenceTransport(statusCodes: [200], body: Self.usageBody)
+
+        _ = try await ProviderInteractionContext.$current.withValue(.userInitiated) {
+            try await FloodgateFetchStrategy.fetchUsage(
+                baseURL: #require(URL(string: "https://gateway.example.com")),
+                clientID: "test-client-id",
+                environment: [:],
+                tokenResolver: resolver,
+                transport: transport)
+        }
+
+        #expect(await recorder.requested == [.none, .gui])
+    }
+
+    @Test
+    func `a lapsed session at mint time surfaces as auth expiry instead of a raw command failure`() async throws {
+        let recorder = InteractivityRecorder()
+        let resolver = Self.lapsedSessionResolver(recorder: recorder)
+        let transport = RecoverySequenceTransport(statusCodes: [200], body: Self.usageBody)
+
+        await #expect(throws: ProviderFetchClassifiedError(
+            kind: .authenticationExpired,
+            message: FloodgateUsageFetcher.authenticationExpiredMessage))
+        {
+            try await FloodgateFetchStrategy.fetchUsage(
+                baseURL: #require(URL(string: "https://gateway.example.com")),
+                clientID: "test-client-id",
+                environment: [:],
+                tokenResolver: resolver,
+                transport: transport)
+        }
+        #expect(await recorder.requested == [.none, .none])
+    }
+
+    @Test
+    func `other appleconnect failures pass through unclassified`() async {
+        let resolver = FloodgateTokenResolver(runSubprocess: { _, _, _ in
+            throw SubprocessRunnerError.nonZeroExit(code: 1, stderr: "unknown option --foo")
+        })
+
+        await #expect(throws: SubprocessRunnerError.self) {
+            try await resolver.token(clientID: "test-client-id", environment: [:])
+        }
+    }
+
     // MARK: - Snapshot preservation
 
     @Test
