@@ -32,7 +32,9 @@ public actor FloodgateTokenResolver {
     ///
     /// Background refresh ticks must stay ``none``: an unattended tick that pops an AppleConnect
     /// window (or a Touch ID sheet behind it) is exactly the surprise ``FloodgateURLSessionDelegate``
-    /// exists to prevent. ``gui`` is reserved for a refresh the user asked for by clicking.
+    /// exists to prevent. ``gui`` is reserved for a refresh the user asked for by clicking, or one
+    /// `FloodgateProviderRuntime` starts when the user is at the Mac (unlock, wake, or an active
+    /// session when a lapse is first detected).
     public enum Interactivity: String, Sendable {
         case none
         case gui

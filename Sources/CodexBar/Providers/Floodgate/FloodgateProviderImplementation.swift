@@ -15,6 +15,10 @@ struct FloodgateProviderImplementation: ProviderImplementation {
         _ = settings[providerConfig: .floodgate, field: .workspace]
     }
 
+    func makeRuntime() -> (any ProviderRuntime)? {
+        FloodgateProviderRuntime()
+    }
+
     @MainActor
     func isAvailable(context: ProviderAvailabilityContext) -> Bool {
         guard FloodgateTokenResolver.isInstalled() else { return false }
